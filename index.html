@@ -3,150 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bitcoin Fee Calculator PRO</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <title>Calculadora Bitcoin Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;600&display=swap" rel="stylesheet">
     <style>
-        :root {
+
+
+:root {
             --primary: #00ff88;
-            --background: #0a0a0a;
-            --surface: #1a1a1a;
-            --text: rgba(255,255,255,0.9);
+            --bg: #0a0a0a;
+            --surface: #171717;
+            --text: rgba(255,255,255,0.92);
+            --radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: var(--background);
+            background: var(--bg);
             color: var(--text);
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+            display: grid;
+            place-items: center;
+            padding: 1rem;
+            line-height: 1.5;
         }
 
         .container {
             background: var(--surface);
-            width: 100%;
-            max-width: 480px;
-            padding: 40px 30px;
-            border-radius: 24px;
-            box-shadow: 0 12px 40px rgba(0,0,0,0.25);
-            border: 1px solid rgba(255,255,255,0.1);
+            width: min(95vw, 400px);
+            padding: 2rem 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: var(--transition);
         }
 
         .header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 2rem;
         }
 
         .logo {
-            width: 60px;
-            margin-bottom: 20px;
-            filter: drop-shadow(0 0 12px var(--primary));
+            width: 120px; /* Aumentamos el tamaño del ícono */
+            height: auto; /* Mantenemos la proporción */
+            margin-bottom: 1.5rem;
+            filter: #;
         }
 
         h1 {
-            font-size: 1.8rem;
+            font-size: 1.75rem;
             font-weight: 600;
-            margin-bottom: 8px;
-            background: linear-gradient(to right, var(--primary), #00ccff);
+            background: linear-gradient(45deg, var(--primary), #00ccff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
         }
 
         .input-group {
-            margin-bottom: 32px;
+            margin-bottom: 1.5rem;
         }
 
         label {
             display: block;
-            font-size: 0.9rem;
-            color: rgba(255,255,255,0.7);
-            margin-bottom: 12px;
+            font-size: 0.875rem;
+            color: rgba(255,255,255,0.75);
+            margin-bottom: 0.75rem;
         }
 
         .input-container {
-            position: relative;
-            background: rgba(255,255,255,0.05);
-            border-radius: 12px;
+            background: rgba(255,255,255,0.03);
+            border-radius: var(--radius);
             border: 1px solid rgba(255,255,255,0.1);
-            transition: all 0.3s ease;
-        }
-
-        .input-container:hover {
-            border-color: var(--primary);
+            transition: border-color 0.3s ease;
+            position: relative;
         }
 
         .input-container:focus-within {
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(0,255,136,0.15);
+            box-shadow: 0 0 0 3px rgba(0,255,136,0.1);
         }
 
-        input {
+        input, select {
             width: 100%;
-            padding: 16px 20px;
+            padding: 0.875rem 1rem;
             background: transparent;
             border: none;
             color: var(--text);
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 500;
+            appearance: none;
         }
 
-        input:focus {
-            outline: none;
-        }
+
+
+
+
+/* Estilo para el select */
+select {
+    background: rgba(255, 255, 255, 0.03); /* Fondo del select */
+    color: rgba(255, 255, 255, 0.92); /* Color del texto del select */
+    cursor: pointer;
+}
+
+/* Estilo para las opciones */
+select option {
+    background: #171717; /* Color de fondo de las opciones */
+    color: rgba(255, 255, 255, 0.92); /* Color del texto de las opciones */
+    padding: 0.5rem;
+}
+
+/* Estilo para la opción seleccionada */
+select option:checked {
+    background: #00ff88; /* Color de fondo al seleccionar */
+    color: #000; /* Color del texto al seleccionar */
+}
+
+
+
+
+
+        
 
         .satoshi-symbol {
             position: absolute;
-            right: 20px;
+            right: 1rem;
             top: 50%;
             transform: translateY(-50%);
             color: rgba(255,255,255,0.4);
-            font-size: 0.9rem;
+            font-size: 0.875rem;
         }
 
         button {
             width: 100%;
-            padding: 18px;
+            padding: 1rem;
             background: linear-gradient(135deg, var(--primary), #00ccff);
             border: none;
-            border-radius: 12px;
+            border-radius: var(--radius);
             color: #000;
-            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 10px;
+            transition: var(--transition);
+            margin-top: 0.5rem;
         }
 
         button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0,255,136,0.3);
+            box-shadow: 0 8px 25px rgba(0,255,136,0.3);
         }
 
         .results {
-            margin-top: 40px;
             opacity: 0;
             transform: translateY(10px);
-            transition: all 0.4s ease;
+            transition: var(--transition);
+            height: 0;
+            overflow: hidden;
         }
 
         .results.visible {
             opacity: 1;
             transform: translateY(0);
+            height: auto;
+            margin-top: 1.5rem;
         }
 
         .result-item {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            padding: 18px 0;
+            padding: 0.875rem 0;
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
@@ -154,96 +183,134 @@
             border-bottom: none;
         }
 
-        .result-label {
-            color: rgba(255,255,255,0.7);
-            font-size: 0.95rem;
-        }
-
         .result-value {
             font-weight: 600;
-            font-size: 1.1rem;
             color: var(--primary);
         }
 
         .error {
             color: #ff4444;
             text-align: center;
-            margin-top: 20px;
-            font-size: 0.9rem;
+            margin: 1rem 0;
+            font-size: 0.875rem;
             display: none;
         }
 
         @media (max-width: 480px) {
             .container {
-                padding: 30px 20px;
-                border-radius: 20px;
+                padding: 1.5rem 1.25rem;
             }
             
             h1 {
                 font-size: 1.5rem;
             }
         }
+
+
+
+
+
+
+        /* Estilo para eliminar los botones de incremento/decremento */
+        input[type="number"] {
+            -moz-appearance: textfield; /* Firefox */
+            appearance: textfield; /* Estándar */
+            background: transparent; /* Fondo transparente */
+            border: none; /* Sin borde adicional */
+            color: rgba(255, 255, 255, 0.92); /* Color del texto */
+            font-size: 1rem; /* Tamaño de fuente */
+            width: 100%; /* Ancho completo */
+            padding: 0.875rem 1rem; /* Espaciado interno */
+        }
+
+        /* Eliminar los botones en navegadores WebKit (Chrome, Safari, Edge) */
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none; /* Desactivar los botones */
+            margin: 0; /* Eliminar margen */
+        }
+
+
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Bitcoin_logo.svg/2560px-Bitcoin_logo.svg.png" class="logo" alt="Bitcoin Logo">
-            <h1>Calculadora de Comisión</h1>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Bitcoin_logo.svg/2560px-Bitcoin_logo.svg.png" class="logo" alt="Bitcoin">
+            <h1>Calculadora Bitcoin Pro</h1>
         </div>
-
         <div class="input-group">
             <label>Monto en Satoshis</label>
             <div class="input-container">
                 <input type="number" id="monto" placeholder="Ej: 2222" autofocus>
                 <span class="satoshi-symbol">SAT</span>
             </div>
- 
-        <button onclick="calcularComision()">Calcular Comisión</button>
-
+        </div>
+        <div class="input-group">
+            <label>Tipo de comisión</label>
+            <div class="input-container">
+                <select id="tipo-comision">
+                    <option value="agayuo">Agayuo (1.215%)</option>
+                    <option value="generoso">Generoso (+1 SAT)</option>
+                </select>
+            </div>
+        </div>
+        <button onclick="calcular()">Calcular</button>
         <div class="error" id="error">Ingresa un monto válido</div>
-
         <div class="results" id="results">
             <div class="result-item">
-                <span class="result-label">Comisión aplicada</span>
+                <span>Comisión aplicada</span>
                 <span class="result-value" id="comision">0 SAT</span>
             </div>
             <div class="result-item">
-                <span class="result-label">Porcentaje</span>
-                <span class="result-value" id="porcentaje">0%</span>
+                <span>Tipo de comisión</span>
+                <span class="result-value" id="tipo">0%</span>
             </div>
             <div class="result-item">
-                <span class="result-label">Monto final</span>
+                <span>Monto final</span>
                 <span class="result-value" id="monto-final">0 SAT</span>
             </div>
         </div>
     </div>
-
     <script>
-        const COMISION_PORCENTAJE = 1.215;
+        const calc = {
+            // Calcula la comisión para "Agayuo"
+            agayuo: m => Math.round(m * 0.01215),
+            // Calcula la comisión para "Generoso"
+            generoso: m => calc.agayuo(m) + 1,
+            // Redondea el monto final
+            redondear: m => Math.max(0, Math.round(m))
+        };
 
-        function calcularComision() {
-            const monto = parseFloat(document.getElementById('monto').value);
-            const results = document.getElementById('results');
-            const error = document.getElementById('error');
+        function calcular() {
+            const montoInput = document.getElementById('monto');
+            const tipoComision = document.getElementById('tipo-comision').value;
+            const resultsDiv = document.getElementById('results');
+            const errorDiv = document.getElementById('error');
+            const container = document.querySelector('.container');
 
-            if (!monto || monto <= 0) {
-                error.style.display = 'block';
-                results.classList.remove('visible');
+            // Validar que el monto sea un número positivo
+            const monto = parseFloat(montoInput.value);
+            if (isNaN(monto) || monto <= 0) {
+                errorDiv.style.display = 'block';
+                resultsDiv.classList.remove('visible');
                 return;
             }
 
-            error.style.display = 'none';
-            
-            const comision = Math.round(monto * (COMISION_PORCENTAJE / 100));
-            const porcentaje = COMISION_PORCENTAJE.toFixed(3);
-            const montoFinal = monto - comision;
+            // Ocultar mensaje de error
+            errorDiv.style.display = 'none';
 
+            // Calcular comisión y monto final
+            const comision = calc[tipoComision](monto);
+            const montoFinal = calc.redondear(monto - comision);
+
+            // Actualizar los valores en la interfaz
             document.getElementById('comision').textContent = `${comision} SAT`;
-            document.getElementById('porcentaje').textContent = `${porcentaje}%`;
+            document.getElementById('tipo').textContent = tipoComision === 'agayuo' ? '1.215%' : '1.215% + 1 SAT';
             document.getElementById('monto-final').textContent = `${montoFinal} SAT`;
-            
-            results.classList.add('visible');
+
+            // Mostrar los resultados con animación
+            resultsDiv.classList.add('visible');
         }
     </script>
 </body>
