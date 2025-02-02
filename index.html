@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitcoin Fee Calculator PRO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00ff88;
+            --background: #0a0a0a;
+            --surface: #1a1a1a;
+            --text: rgba(255,255,255,0.9);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: var(--surface);
+            width: 100%;
+            max-width: 480px;
+            padding: 40px 30px;
+            border-radius: 24px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            width: 60px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 12px var(--primary));
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            background: linear-gradient(to right, var(--primary), #00ccff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .input-group {
+            margin-bottom: 32px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 12px;
+        }
+
+        .input-container {
+            position: relative;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .input-container:hover {
+            border-color: var(--primary);
+        }
+
+        .input-container:focus-within {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0,255,136,0.15);
+        }
+
+        input {
+            width: 100%;
+            padding: 16px 20px;
+            background: transparent;
+            border: none;
+            color: var(--text);
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        input:focus {
+            outline: none;
+        }
+
+        .satoshi-symbol {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255,255,255,0.4);
+            font-size: 0.9rem;
+        }
+
+        button {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, var(--primary), #00ccff);
+            border: none;
+            border-radius: 12px;
+            color: #000;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,255,136,0.3);
+        }
+
+        .results {
+            margin-top: 40px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.4s ease;
+        }
+
+        .results.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.95rem;
+        }
+
+        .result-value {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--primary);
+        }
+
+        .error {
+            color: #ff4444;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+                border-radius: 20px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2Ij48cGF0aCBkPSJNMjI4Ljk0LDE0OC43M2ExNi4xNywxNi4xNywwLDAsMS0xLjQ0LDIuNDRjLTIxLjQ1LDM0Ljc0LTY4LjM4LDQ2LjI2LTEwNC44MSwyNS42NWE3OC43Nyw3OC43NywwLDAsMS0xMi4zNi03LjM3LDg0LDg0LDAsMCwxLTEyMy4yMi02LjM5QzI2LjM5LDE3MS44NiwzNS41MSwxMzUuNyw1My44OCwxMDguMjNhMTI1LjM4LDEyNS4zOCwwLDAsMSwzOC40My0zNS43MkExMjQuODUsMTI0Ljg1LDAsMCwxLDEzMC44OSw1Mi4zYTg0LjQ1LDg0LjQ1LDAsMCwxLDY5LjU2LTE0LjQ0YzE5LjU4LDQuMjIsNDAuNDQsMTMuMTMsNDguNTgsMzEuMzRzNi41NCw0MC42My0zLjgxLDYwLjA3YTIzLjY5LDIzLjY5LDAsMCwxLTEuNzksMy4yM1oiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwZmY4OCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2Utd2lkdGg9IjI0Ii8+PC9zdmc+" class="logo" alt="Bitcoin Logo">
+            <h1>Calculadora de Comisión</h1>
+        </div>
+
+        <div class="input-group">
+            <label>Monto en Satoshis</label>
+            <div class="input-container">
+                <input type="number" id="monto" placeholder="Ej: 2222" autofocus>
+                <span class="satoshi-symbol">SAT</span>
+            </div>
+        </div>
+
+        <button onclick="calcularComision()">Calcular Comisión</button>
+
+        <div class="error" id="error">Ingresa un monto válido</div>
+
+        <div class="results" id="results">
+            <div class="result-item">
+                <span class="result-label">Comisión aplicada</span>
+                <span class="result-value" id="comision">0 SAT</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Porcentaje</span>
+                <span class="result-value" id="porcentaje">0%</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Monto final</span>
+                <span class="result-value" id="monto-final">0 SAT</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const COMISION_PORCENTAJE = 1.215;
+
+        function calcularComision() {
+            const monto = parseFloat(document.getElementById('monto').value);
+            const results = document.getElementById('results');
+            const error = document.getElementById('error');
+
+            if (!monto || monto <= 0) {
+                error.style.display = 'block';
+                results.classList.remove('visible');
+                return;
+            }
+
+            error.style.display = 'none';
+            
+            const comision = Math.round(monto * (COMISION_PORCENTAJE / 100));
+            const porcentaje = COMISION_PORCENTAJE.toFixed(3);
+            const montoFinal = monto - comision;
+
+            document.getElementById('comision').textContent = `${comision} SAT`;
+            document.getElementById('porcentaje').textContent = `${porcentaje}%`;
+            document.getElementById('monto-final').textContent = `${montoFinal} SAT`;
+            
+            results.classList.add('visible');
+        }
+    </script>
+</body>
+</html>
