@@ -273,46 +273,58 @@ select option:checked {
             </div>
         </div>
     </div>
+
+
     <script>
-        const calc = {
-            // Calcula la comisión para "Agayuo"
-            agayuo: m => Math.round(m * 0.01215),
-            // Calcula la comisión para "Generoso"
-            generoso: m => calc.agayuo(m) + 1,
-            // Redondea el monto final
-            redondear: m => Math.max(0, Math.round(m))
-        };
+  const calc = {
+    // Calcula la comisión para "Agayuo" (con lógica para montos impares)
+    agayuo: m => {
+      if (m % 2 !== 0) { // Verifica si el monto es impar
+        const comisionFloat = m * 0.01215;
+        return Math.ceil(comisionFloat); // Redondea hacia arriba
+      } else {
+        return Math.trunc(m * 0.01215); // Truncamiento normal para montos pares
+      }
+    },
+    // Calcula la comisión para "Generoso"
+    generoso: m => calc.agayuo(m) + 1,
+    // Redondea el monto final
+    redondear: m => Math.max(0, Math.round(m))
+  };
 
-        function calcular() {
-            const montoInput = document.getElementById('monto');
-            const tipoComision = document.getElementById('tipo-comision').value;
-            const resultsDiv = document.getElementById('results');
-            const errorDiv = document.getElementById('error');
-            const container = document.querySelector('.container');
+  function calcular() {
+    const montoInput = document.getElementById('monto');
+    const tipoComision = document.getElementById('tipo-comision').value;
+    const resultsDiv = document.getElementById('results');
+    const errorDiv = document.getElementById('error');
+    const container = document.querySelector('.container');
 
-            // Validar que el monto sea un número positivo
-            const monto = parseFloat(montoInput.value);
-            if (isNaN(monto) || monto <= 0) {
-                errorDiv.style.display = 'block';
-                resultsDiv.classList.remove('visible');
-                return;
-            }
+    // Validar que el monto sea un número positivo
+    const monto = parseFloat(montoInput.value);
+    if (isNaN(monto) || monto <= 0) {
+      errorDiv.style.display = 'block';
+      resultsDiv.classList.remove('visible');
+      return;
+    }
 
-            // Ocultar mensaje de error
-            errorDiv.style.display = 'none';
+    // Ocultar mensaje de error
+    errorDiv.style.display = 'none';
 
-            // Calcular comisión y monto final
-            const comision = calc[tipoComision](monto);
-            const montoFinal = calc.redondear(monto - comision);
+    // Calcular comisión y monto final
+    const comision = calc[tipoComision](monto);
+    const montoFinal = calc.redondear(monto - comision);
 
-            // Actualizar los valores en la interfaz
-            document.getElementById('comision').textContent = `${comision} SAT`;
-            document.getElementById('tipo').textContent = tipoComision === 'agayuo' ? '1.215%' : '1.215% + 1 SAT';
-            document.getElementById('monto-final').textContent = `${montoFinal} SAT`;
+    // Actualizar los valores en la interfaz
+    document.getElementById('comision').textContent = `${comision} SAT`;
+    document.getElementById('tipo').textContent = tipoComision === 'agayuo' ? '1.215%' : '1.215% + 1 SAT';
+    document.getElementById('monto-final').textContent = `${montoFinal} SAT`;
 
-            // Mostrar los resultados con animación
-            resultsDiv.classList.add('visible');
-        }
-    </script>
+    // Mostrar los resultados con animación
+    resultsDiv.classList.add('visible');
+  }
+</script>
+
+
+    
 </body>
 </html>
