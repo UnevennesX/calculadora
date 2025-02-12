@@ -275,7 +275,7 @@ select option:checked {
     </div>
 
 
-    <script>
+<script>
   const calc = {
     // Calcula la comisión para "Agayuo" (con lógica para montos impares)
     agayuo: m => {
@@ -286,8 +286,11 @@ select option:checked {
         return Math.trunc(m * 0.01215); // Truncamiento normal para montos pares
       }
     },
-    // Calcula la comisión para "Generoso"
-    generoso: m => calc.agayuo(m) + 1,
+    // Calcula la comisión para "Generoso" (ajustada)
+    generoso: m => {
+      const agayuoComision = calc.agayuo(m); // Calcula la comisión de Agayuo
+      return agayuoComision + 1; // Agrega 1 SAT a la comisión de Agayuo
+    },
     // Redondea el monto final
     redondear: m => Math.max(0, Math.round(m))
   };
