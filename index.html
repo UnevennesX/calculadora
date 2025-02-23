@@ -1,21 +1,22 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora Bitcoin Pro</title>
-        <link rel="icon" type="image/png" href="https://cdn.dribbble.com/users/7549673/screenshots/17206704/media/1210a9d0ec8af427967e735935861eeb.png?resize=400x300&vertical=center" />
+    <link rel="icon" type="image/png" href="https://cdn.dribbble.com/users/7549673/screenshots/17206704/media/1210a9d0ec8af427967e735935861eeb.png?resize=400x300&vertical=center" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;600&display=swap" rel="stylesheet">
     <style>
-
-
-:root {
+        :root {
             --primary: #00ff88;
             --bg: #0a0a0a;
             --surface: #171717;
             --text: rgba(255,255,255,0.92);
             --radius: 12px;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --success-bg: #1a4d2e;
+            --success-text: #b3ffb3;
         }
 
         * {
@@ -38,7 +39,7 @@
         .container {
             background: var(--surface);
             width: min(95vw, 400px);
-            padding: 2rem 1.5rem;
+            padding: 2.2rem 1.5rem;
             border-radius: var(--radius);
             box-shadow: 0 12px 30px rgba(0,0,0,0.4);
             border: 1px solid rgba(255,255,255,0.08);
@@ -47,14 +48,16 @@
 
         .header {
             text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: 2.2rem;
         }
 
         .logo {
-            width: 120px; /* Aumentamos el tamaño del ícono */
-            height: auto; /* Mantenemos la proporción */
-            margin-bottom: 1.5rem;
+            width: 120px;
+            height: auto;
+            margin-bottom: 1.7rem;
             filter: #;
+           /* pointer-events: none;   Eliminado para permitir interacciones con el ratón */
+            user-select: none; /* Evita la selección del texto */
         }
 
         h1 {
@@ -63,18 +66,18 @@
             background: linear-gradient(45deg, var(--primary), #00ccff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.7rem;
         }
 
         .input-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.7rem;
         }
 
         label {
             display: block;
             font-size: 0.875rem;
             color: rgba(255,255,255,0.75);
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.95rem;
         }
 
         .input-container {
@@ -101,35 +104,22 @@
             appearance: none;
         }
 
+        select {
+            background: rgba(255, 255, 255, 0.03);
+            color: rgba(255, 255, 255, 0.92);
+            cursor: pointer;
+        }
 
+        select option {
+            background: #171717;
+            color: rgba(255, 255, 255, 0.92);
+            padding: 0.5rem;
+        }
 
-
-
-/* Estilo para el select */
-select {
-    background: rgba(255, 255, 255, 0.03); /* Fondo del select */
-    color: rgba(255, 255, 255, 0.92); /* Color del texto del select */
-    cursor: pointer;
-}
-
-/* Estilo para las opciones */
-select option {
-    background: #171717; /* Color de fondo de las opciones */
-    color: rgba(255, 255, 255, 0.92); /* Color del texto de las opciones */
-    padding: 0.5rem;
-}
-
-/* Estilo para la opción seleccionada */
-select option:checked {
-    background: #00ff88; /* Color de fondo al seleccionar */
-    color: #000; /* Color del texto al seleccionar */
-}
-
-
-
-
-
-        
+        select option:checked {
+            background: #00ff88;
+            color: #000;
+        }
 
         .satoshi-symbol {
             position: absolute;
@@ -150,7 +140,7 @@ select option:checked {
             font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
-            margin-top: 0.5rem;
+            margin-top: 0.7rem;
         }
 
         button:hover {
@@ -170,7 +160,7 @@ select option:checked {
             opacity: 1;
             transform: translateY(0);
             height: auto;
-            margin-top: 1.5rem;
+            margin-top: 1.7rem;
         }
 
         .result-item {
@@ -178,6 +168,8 @@ select option:checked {
             justify-content: space-between;
             padding: 0.875rem 0;
             border-bottom: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+            /* Para posicionar la notificación correctamente */
         }
 
         .result-item:last-child {
@@ -201,44 +193,64 @@ select option:checked {
             .container {
                 padding: 1.5rem 1.25rem;
             }
-            
+
             h1 {
                 font-size: 1.5rem;
             }
         }
 
-
-
-
-
-
         /* Estilo para eliminar los botones de incremento/decremento */
         input[type="number"] {
-            -moz-appearance: textfield; /* Firefox */
-            appearance: textfield; /* Estándar */
-            background: transparent; /* Fondo transparente */
-            border: none; /* Sin borde adicional */
-            color: rgba(255, 255, 255, 0.92); /* Color del texto */
-            font-size: 1rem; /* Tamaño de fuente */
-            width: 100%; /* Ancho completo */
-            padding: 0.875rem 1rem; /* Espaciado interno */
+            -moz-appearance: textfield;
+            appearance: textfield;
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.92);
+            font-size: 1rem;
+            width: 100%;
+            padding: 0.875rem 1rem;
         }
 
         /* Eliminar los botones en navegadores WebKit (Chrome, Safari, Edge) */
         input[type="number"]::-webkit-inner-spin-button,
         input[type="number"]::-webkit-outer-spin-button {
-            -webkit-appearance: none; /* Desactivar los botones */
-            margin: 0; /* Eliminar margen */
+            -webkit-appearance: none;
+            margin: 0;
         }
 
+        /* Estilo para la notificación de copia */
+        .copy-notification {
+            position: absolute;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            background-color: var(--success-bg);
+            color: var(--success-text);
+            padding: 0.3rem 0.6rem;
+            border-radius: 12px;
+            /* Misma que --radius para consistencia */
+            font-size: 0.75rem;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            transform: translateY(-50%) translateX(10px);
+            /* Empieza un poco a la derecha y oculta */
+            white-space: nowrap;
+            z-index: 10;
+        }
 
+        .copy-notification.visible {
+            opacity: 1;
+            transform: translateY(-50%) translateX(0);
+            /* Desplaza la notificación a su posición final */
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="header">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Bitcoin_logo.svg/2560px-Bitcoin_logo.svg.png" class="logo" alt="Bitcoin">
-            <h1>Calculadora Bitcoin Pro</h1>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Bitcoin_logo.svg/2560px-Bitcoin_logo.svg.png" class="logo" alt="Bitcoin" >
+            <h1>Calculadora UnevennesX</h1>
         </div>
         <div class="input-group">
             <label>Monto en Satoshis</label>
@@ -251,10 +263,8 @@ select option:checked {
             <label>Tipo de comisión</label>
             <div class="input-container">
                 <select id="tipo-comision">
-
-                    <option value="generoso" >Generoso (+1 SAT)</option>
-                    <option value="agayuo" disabled>Agayuo (1.215%)</option>
-
+                    <option value="generoso">Generoso (+1 SAT)</option>
+                    <option value="agayuo">Agayuo (1.217%)</option>
                 </select>
             </div>
         </div>
@@ -263,7 +273,7 @@ select option:checked {
         <div class="results" id="results">
             <div class="result-item">
                 <span>Comisión aplicada</span>
-                <span class="result-value" id="comision">0 SAT</span>
+                <span class="result-value" id="comision-aplicada">0 SAT</span>
             </div>
             <div class="result-item">
                 <span>Tipo de comisión</span>
@@ -271,65 +281,83 @@ select option:checked {
             </div>
             <div class="result-item">
                 <span>Monto final</span>
-                <span class="result-value" id="monto-final">0 SAT</span>
+                <span class="result-value" id="monto-final">0.00000000 SAT</span>
+                <span class="copy-notification" id="copy-notification">¡Copiado Automáticamente!</span>
+
             </div>
         </div>
     </div>
 
+    <script>
+        const calc = {
+            agayuo: m => {
+                const comisionFloat = m * 0.01217;
+                return Math.ceil(comisionFloat);
+            },
+            generoso: m => {
+                if (m % 2 !== 0) {
+                    const comisionFloat = m * 0.01215;
+                    return Math.ceil(comisionFloat) + 1;
+                } else {
+                    return Math.trunc(m * 0.01215) + 1;
+                }
+            },
+            redondear: m => Math.max(0, Math.round(m))
+        };
 
-<script>
-  const calc = {
-    // Calcula la comisión para "Agayuo" (con lógica para montos impares)
-    agayuo: m => {
-      if (m % 2 !== 0) { // Verifica si el monto es impar
-        const comisionFloat = m * 0.01215;
-        return Math.ceil(comisionFloat); // Redondea hacia arriba
-      } else {
-        return Math.trunc(m * 0.01215); // Truncamiento normal para montos pares
-      }
-    },
-    // Calcula la comisión para "Generoso" (ajustada)
-    generoso: m => {
-      const agayuoComision = calc.agayuo(m); // Calcula la comisión de Agayuo
-      return agayuoComision + 1; // Agrega 1 SAT a la comisión de Agayuo
-    },
-    // Redondea el monto final
-    redondear: m => Math.max(0, Math.round(m))
-  };
+        function calcular() {
+            const montoInput = document.getElementById('monto');
+            const tipoComision = document.getElementById('tipo-comision').value;
+            const resultsDiv = document.getElementById('results');
+            const errorDiv = document.getElementById('error');
+            const montoFinalElement = document.getElementById('monto-final');
+            const copyNotification = document.getElementById('copy-notification');
 
-  function calcular() {
-    const montoInput = document.getElementById('monto');
-    const tipoComision = document.getElementById('tipo-comision').value;
-    const resultsDiv = document.getElementById('results');
-    const errorDiv = document.getElementById('error');
-    const container = document.querySelector('.container');
+            const monto = parseFloat(montoInput.value);
+            if (isNaN(monto) || monto <= 0) {
+                errorDiv.style.display = 'block';
+                resultsDiv.classList.remove('visible');
+                return;
+            }
 
-    // Validar que el monto sea un número positivo
-    const monto = parseFloat(montoInput.value);
-    if (isNaN(monto) || monto <= 0) {
-      errorDiv.style.display = 'block';
-      resultsDiv.classList.remove('visible');
-      return;
-    }
+            errorDiv.style.display = 'none';
 
-    // Ocultar mensaje de error
-    errorDiv.style.display = 'none';
+            const comision = calc[tipoComision](monto);
+            const montoFinal = calc.redondear(monto - comision);
+            const montoFinalFormateado = (montoFinal / 100000000).toFixed(8).padStart(10, '0');
 
-    // Calcular comisión y monto final
-    const comision = calc[tipoComision](monto);
-    const montoFinal = calc.redondear(monto - comision);
+            document.getElementById('comision-aplicada').textContent = `${comision} SAT`; // Mostrar la comisión aplicada
+            document.getElementById('tipo').textContent = tipoComision === 'agayuo' ? '1.217%' : '1.215% + 1 SAT';
+            montoFinalElement.textContent = `${montoFinalFormateado} SAT`;
 
-    // Actualizar los valores en la interfaz
-    document.getElementById('comision').textContent = `${comision} SAT`;
-    document.getElementById('tipo').textContent = tipoComision === 'agayuo' ? '1.215%' : '1.215% + 1 SAT';
-    document.getElementById('monto-final').textContent = `${montoFinal} SAT`;
+            resultsDiv.classList.add('visible');
 
-    // Mostrar los resultados con animación
-    resultsDiv.classList.add('visible');
-  }
-</script>
+            // Copiar automáticamente al portapapeles
+            copiarMontoFinal(montoFinalFormateado);
 
+            // Mostrar la notificación de copia
+            copyNotification.classList.add('visible');
 
-    
+            // Ocultar la notificación después de un tiempo
+            setTimeout(() => {
+                copyNotification.classList.remove('visible');
+            }, 1500); // 1.5 segundos
+        }
+
+        document.getElementById('monto').addEventListener('keyup', function(event) {
+            if (event.key === 'Enter') {
+                calcular();
+            }
+        });
+
+        function copiarMontoFinal(montoFinal) {
+            navigator.clipboard.writeText(montoFinal)
+                .catch(err => {
+                    console.error('Error al copiar: ', err);
+                    // Aquí puedes agregar una lógica más robusta para manejar el error si es necesario
+                });
+        }
+    </script>
 </body>
+
 </html>
